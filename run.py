@@ -12,10 +12,29 @@ SCOPE_RHM = RWAGASORE_HISTORY_MANAGER.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPE_RHM)
 SHEET = GSPREAD_CLIENT.open ('Rwagasore History Manager')
 
+from datetime import datetime
 # Functions for each operation
 def add_entry():
     print("You selected: Add Entry")
-    # Add logic for adding an entry here
+    # Prompt for Name
+    name = input("Enter Name: ")
+    
+    # Prompt for Date of Birth with validation
+    while True:
+        dob = input("Enter Date of Birth (YYYY-MM-DD): ")
+        try:
+            # Check if the date is valid by attempting to parse it
+            datetime.strptime(dob, '%Y-%m-%d')
+            break  # Exit loop if date is valid
+        except ValueError:
+            print("Invalid date format. Please use YYYY-MM-DD format.")
+    
+    # Prompt for Political Affiliations
+    political_affiliations = input("Enter Political Affiliations: ")
+    
+    # Simulate adding the entry (this is where I could add logic to save the data)
+    # For now, we just display the confirmation message
+    print("Added successfully")
 
 def search_entry():
     print("You selected: Search Entry")
