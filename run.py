@@ -27,17 +27,17 @@ def add_entry():
     Description
     """
     print("You selected: Add Entry\n")
-    category = input("Enter Category (Biography, Event, Document): ")
-    name = input("Enter Name/Title: ")
+    category = input("Enter Category (Biography, Event, Document):\n")
+    name = input("Enter Name/Title:\n")
     # Prompt for Date with validation
     while True:
-        date = input("Enter Date (YYYY-MM-DD): ")
+        date = input("Enter Date (YYYY-MM-DD):\n")
         try:
             datetime.strptime(date, "%Y-%m-%d")
             break
         except ValueError:
             print("Invalid date format. Please use YYYY-MM-DD format.")
-    description = input("Enter Description: ")
+    description = input("Enter Description:\n")
 
     sheet1 = SHEET.worksheet("Sheet1")
     # Add the entry to the Google Sheet
@@ -51,7 +51,7 @@ def search_entry():
     print("You selected: Search Entry\n")
     # Prompt user to enter a search term
     search_term = input(
-        "Enter a search term (Category, Name/Title, Date, or Description): "
+        "Enter a search term (Category, Name/Title, Date, or Description):\n"
     )
     sheet1 = SHEET.worksheet("Sheet1")
     records = sheet1.get_all_records()
@@ -91,7 +91,7 @@ def edit_entry():
     print("You selected: Edit Entry\n")
     # Prompt user to enter a search term to find the entry they want to edit
     search_term = input(
-        "Enter a search term to find the entry (Category, Name/Title, Date, or Description): "
+        "Enter a search term to find the entry (Category, Name/Title, Date, or Description):\n"
     )
     sheet1 = SHEET.worksheet("Sheet1")
     records = sheet1.get_all_records()
@@ -126,7 +126,7 @@ def edit_entry():
             try:
                 selection = int(
                     input(
-                        f"Enter the number of the match you want to edit (1-{num_matches}): "
+                        f"Enter the number of the match you want to edit (1-{num_matches}):\n"
                     )
                 )
                 if 1 <= selection <= num_matches:
@@ -152,7 +152,7 @@ def edit_entry():
             try:
                 field_selection = int(
                     input(
-                        "Enter the number corresponding to the field you want to edit: "
+                        "Enter the number corresponding to the field you want to edit:\n"
                     )
                 )
                 if 1 <= field_selection <= 4:
@@ -167,7 +167,7 @@ def edit_entry():
         selected_field = fields[field_selection - 1]
 
         # Prompt for the new value
-        new_value = input(f"Enter new value for {selected_field}: ")
+        new_value = input(f"Enter new value for {selected_field}:\n")
 
         # If the user is editing the Date, validate the new date format
         if selected_field == "Date":
@@ -177,7 +177,7 @@ def edit_entry():
                     break
                 except ValueError:
                     new_value = input(
-                        "Invalid date format. Please use YYYY-MM-DD format: "
+                        "Invalid date format. Please use YYYY-MM-DD format:\n"
                     )
 
         # Update the Google Sheet with the new value
@@ -196,7 +196,7 @@ def view_entry():
     """
     print("You selected: View Entry\n")
     # Ask if the user wants to view all entries or search
-    view_all = input("Do you want to view all entries? (yes/no): ").lower()
+    view_all = input("Do you want to view all entries? (yes/no):\n").lower()
     sheet1 = SHEET.worksheet("Sheet1")
     records = sheet1.get_all_records()
     matches = []  # To store either all records or matching records
@@ -206,7 +206,7 @@ def view_entry():
     else:
         # Prompt user to enter a search term
         search_term = input(
-            "Enter a search term (Category, Name/Title, Date, or Description): "
+            "Enter a search term (Category, Name/Title, Date, or Description):\n"
         )
 
         # Iterate through the records to search for the term in any column
@@ -246,7 +246,7 @@ def delete_entry():
     print("You selected: Delete Entry\n")
     # Prompt user to enter a search term to find the entry they want to delete
     search_term = input(
-        "Enter a search term to find the entry (Category, Name/Title, Date, or Description): "
+        "Enter a search term to find the entry (Category, Name/Title, Date, or Description):\n"
     )
     sheet1 = SHEET.worksheet("Sheet1")
     records = sheet1.get_all_records()
@@ -282,7 +282,7 @@ def delete_entry():
             try:
                 selection = int(
                     input(
-                        f"Enter the number of the match you want to delete (1-{num_matches}): "
+                        f"Enter the number of the match you want to delete (1-{num_matches}): \n"
                     )
                 )
                 if 1 <= selection <= num_matches:
@@ -299,7 +299,7 @@ def delete_entry():
 
         # Confirm deletion
         confirmation = input(
-            f"Are you sure you want to delete the entry '{selected_record['Name/Title']}'? (yes/no): "
+            f"Are you sure you want to delete the entry '{selected_record['Name/Title']}'? (yes/no):\n"
         ).lower()
         if confirmation == "yes":
             # Delete the selected row
@@ -325,7 +325,7 @@ def main():
 
         try:
             choice = int(
-                input("Please enter the number corresponding to your operation: ")
+                input("Please enter the number corresponding to your operation:\n")
             )
             if choice == 1:
                 add_entry()
