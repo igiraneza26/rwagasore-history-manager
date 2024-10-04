@@ -91,7 +91,7 @@ def edit_entry():
     print("You selected: Edit Entry\n")
     # Prompt user to enter a search term to find the entry they want to edit
     search_term = input(
-        "Enter a search term to find the entry (searches Category, Name/Title, Date, or Description): "
+        "Enter a search term to find the entry (Category, Name/Title, Date, or Description): "
     )
     sheet1 = SHEET.worksheet("Sheet1")
     records = sheet1.get_all_records()
@@ -189,8 +189,46 @@ def edit_entry():
 
 
 def view_entry():
+    """
+    User provides a search term and app displays all matching entries.
+    Option to view all entries.
+    Results displayed in a user-friendly way.
+    """
     print("You selected: View Entry\n")
-    # Add logic for viewing an entry here
+    # Ask if the user wants to view all entries or search
+    view_all = input("Do you want to view all entries? (yes/no): ").lower()
+    sheet1 = SHEET.worksheet("Sheet1")
+    records = sheet1.get_all_records()
+    matches = []  # To store either all records or matching records
+    # If user chooses to view all entries
+    if view_all == 'yes':
+        matches = records
+    else:
+        # Prompt user to enter a search term
+        search_term = input("Enter a search term (Category, Name/Title, Date, or Description): ")
+        
+        # Iterate through the records to search for the term in any column
+        for record in records:
+            if (search_term.lower() in str(record['Category']).lower() or
+                search_term.lower() in str(record['Name/Title']).lower() or
+                search_term.lower() in str(record['Date']).lower() or
+                search_term.lower() in str(record['Description']).lower()):
+                matches.append(record)
+
+    # Display the number of matches found
+    num_matches = len(matches)
+    if num_matches > 0:
+        print(f"\n{num_matches} entry(ies) found:\n")
+        # Display the records in a readable format
+        for i, match in enumerate(matches, 1):
+            print(f"Entry {i}:")
+            print(f"  Category: {match['Category']}")
+            print(f"  Name/Title: {match['Name/Title']}")
+            print(f"  Date: {match['Date']}")
+            print(f"  Description: {match['Description']}")
+            print("-" * 40)
+    else:
+        print("No matching entries found.")
 
 
 def delete_entry():
@@ -202,7 +240,7 @@ def main():
     """Run all program functions"""
     while True:
         print("\nWelcome to the Rwagasore History Manager app\n")
-        print("Menu:")
+        print("You can perform the following operations on the data/entries:")
         print("1. Add")
         print("2. Search")
         print("3. Edit")
@@ -211,7 +249,7 @@ def main():
         print("6. Exit\n")
 
         try:
-            choice = int(input("Please enter your operation number from the menu: "))
+            choice = int(input("Please enter the number corresponding to your operation: "))
             if choice == 1:
                 add_entry()
             elif choice == 2:
