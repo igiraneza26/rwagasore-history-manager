@@ -201,18 +201,22 @@ def view_entry():
     records = sheet1.get_all_records()
     matches = []  # To store either all records or matching records
     # If user chooses to view all entries
-    if view_all == 'yes':
+    if view_all == "yes":
         matches = records
     else:
         # Prompt user to enter a search term
-        search_term = input("Enter a search term (Category, Name/Title, Date, or Description): ")
-        
+        search_term = input(
+            "Enter a search term (Category, Name/Title, Date, or Description): "
+        )
+
         # Iterate through the records to search for the term in any column
         for record in records:
-            if (search_term.lower() in str(record['Category']).lower() or
-                search_term.lower() in str(record['Name/Title']).lower() or
-                search_term.lower() in str(record['Date']).lower() or
-                search_term.lower() in str(record['Description']).lower()):
+            if (
+                search_term.lower() in str(record["Category"]).lower()
+                or search_term.lower() in str(record["Name/Title"]).lower()
+                or search_term.lower() in str(record["Date"]).lower()
+                or search_term.lower() in str(record["Description"]).lower()
+            ):
                 matches.append(record)
 
     # Display the number of matches found
@@ -232,8 +236,79 @@ def view_entry():
 
 
 def delete_entry():
+    """
+    User provides a search term and app retrieves all macthes.
+    Function displays all matches with all fields (category, name, date and description).
+    Uer chooses which entry to delete from matches.
+    Confirmation request from user before proceeding with deletion.
+    Delete once confirmed.
+    """
     print("You selected: Delete Entry\n")
-    # Add logic for deleting an entry here
+    # Prompt user to enter a search term to find the entry they want to delete
+    search_term = input(
+        "Enter a search term to find the entry (Category, Name/Title, Date, or Description): "
+    )
+    sheet1 = SHEET.worksheet("Sheet1")
+    records = sheet1.get_all_records()
+    matches = []  # Initialize a list of store matches.
+    # Iterate through the records to search for the term in any column
+    for index, record in enumerate(
+        records, start=2
+    ):  # Start at 2 because Google Sheets are 1-indexed, and row 1 is header
+        if (
+            search_term.lower() in str(record["Category"]).lower()
+            or search_term.lower() in str(record["Name/Title"]).lower()
+            or search_term.lower() in str(record["Date"]).lower()
+            or search_term.lower() in str(record["Description"]).lower()
+        ):
+            matches.append((index, record))  # Store both the row index and the record
+
+    # Display the number of matches found
+    num_matches = len(matches)
+    if num_matches > 0:
+        print(f"\n{num_matches} match(es) found:\n")
+        # Display the records in a readable format
+        for i, (index, match) in enumerate(matches, 1):
+            print(f"Match {i}:")
+            print(f"  Row: {index}")
+            print(f"  Category: {match['Category']}")
+            print(f"  Name/Title: {match['Name/Title']}")
+            print(f"  Date: {match['Date']}")
+            print(f"  Description: {match['Description']}")
+            print("-" * 40)
+
+        # Prompt user to select which entry to delete
+        while True:
+            try:
+                selection = int(
+                    input(
+                        f"Enter the number of the match you want to delete (1-{num_matches}): "
+                    )
+                )
+                if 1 <= selection <= num_matches:
+                    break
+                else:
+                    print(
+                        f"Invalid selection. Please enter a number between 1 and {num_matches}."
+                    )
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+
+        # Get the selected record and row index
+        selected_row, selected_record = matches[selection - 1]
+
+        # Confirm deletion
+        confirmation = input(
+            f"Are you sure you want to delete the entry '{selected_record['Name/Title']}'? (yes/no): "
+        ).lower()
+        if confirmation == "yes":
+            # Delete the selected row
+            sheet1.delete_rows(selected_row)
+            print(f"\nEntry '{selected_record['Name/Title']}' deleted successfully.")
+        else:
+            print("Deletion canceled.")
+    else:
+        print("No matching records found.")
 
 
 def main():
@@ -249,7 +324,9 @@ def main():
         print("6. Exit\n")
 
         try:
-            choice = int(input("Please enter the number corresponding to your operation: "))
+            choice = int(
+                input("Please enter the number corresponding to your operation: ")
+            )
             if choice == 1:
                 add_entry()
             elif choice == 2:
