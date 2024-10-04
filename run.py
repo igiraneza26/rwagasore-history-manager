@@ -53,32 +53,37 @@ def delete_entry():
     # Add logic for deleting an entry here
 
 def main():
+    while True:
     # Display the welcome message and menu
-    print("Welcome to the Rwagasore History Manager app\n")
-    print("Menu:")
-    print("1. Add")
-    print("2. Search")
-    print("3. Edit")
-    print("4. View")
-    print("5. Delete\n")
-    
-    # Get user input for the operation
-    try:
-        choice = int(input("Please enter your operation number from the menu: "))
-        if choice == 1:
-            add_entry()
-        elif choice == 2:
-            search_entry()
-        elif choice == 3:
-            edit_entry()
-        elif choice == 4:
-            view_entry()
-        elif choice == 5:
-            delete_entry()
-        else:
-            print("Invalid choice, please select a number from 1 to 5.")
-    except ValueError:
-        print("Invalid input. Please enter a valid number.")
+        print("Welcome to the Rwagasore History Manager app\n")
+        print("Menu:")
+        print("1. Add")
+        print("2. Search")
+        print("3. Edit")
+        print("4. View")
+        print("5. Delete")
+        print("6. Exit\n")
+        
+        # Get user input for the operation
+        try:
+            choice = int(input("Please enter your operation number from the menu: "))
+            if choice == 1:
+                add_entry()
+            elif choice == 2:
+                search_entry()
+            elif choice == 3:
+                edit_entry()
+            elif choice == 4:
+                view_entry()
+            elif choice == 5:
+                delete_entry()
+            elif choice == 6:
+                print("Exiting the RHM application. Goodbye!")
+                break  # Exit the loop and terminate the program
+            else:
+                print("Invalid choice, please select a number from 1 to 5.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
 
 # Run the application
 if __name__ == "__main__":
