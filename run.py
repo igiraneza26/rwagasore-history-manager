@@ -9,7 +9,7 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive",
 ]
 RWAGASORE_HISTORY_MANAGER = Credentials.from_service_account_file(
-    "rwagasore-history-manager.json"
+    "creds.json"
 )
 SCOPE_RHM = RWAGASORE_HISTORY_MANAGER.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPE_RHM)
